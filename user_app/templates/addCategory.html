@@ -18,13 +18,13 @@
 
 <table>
     <tr>
-        <th>Catagory</th>
+        <th>Category</th>
         <th>Budget</th>
     </tr>
-    {% for catagory in catagories %}
+    {% for category in categories %}
     <tr>  
-        <td>{{ catagory.name }}</td>
-        <td>${{ catagory.budget }}</td> 
+        <td>{{ category.name }}</td>
+        <td>${{ category.budget }}</td> 
     </tr>
     {% endfor %}
 </table>

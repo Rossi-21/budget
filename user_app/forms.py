@@ -6,10 +6,18 @@ from .models import *
 class TransactionCreateForm(ModelForm):
     class Meta:
         model = Transaction
-        fields = ['date', 'location', 'amount', 'catagory']
+        fields = ['date', 'location', 'amount', 'category']
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date'})
+            'date': forms.DateInput(attrs={'type': 'date', 'class': 'form'}),
+            'location': forms.Select(attrs={'class': 'form'}),
+            'category': forms.Select(attrs={'class': 'form'}),
         }
+
+    amount = forms.DecimalField(
+        widget=forms.NumberInput(attrs={'class': 'form'}),
+        max_digits=10,
+        decimal_places=2
+    )
 
 
 class LocationCreateForm(ModelForm):
@@ -18,7 +26,7 @@ class LocationCreateForm(ModelForm):
         fields = ['name']
 
 
-class CatagoryCreateForm(ModelForm):
+class CategoryCreateForm(ModelForm):
     class Meta:
-        model = Catagory
+        model = Category
         fields = ['name', 'budget']

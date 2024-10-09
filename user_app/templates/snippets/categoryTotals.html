@@ -1,0 +1,42 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                {% for category in category_totals %}
+                    <th>{{ category.name }}</th>
+                {% endfor %}
+            </tr>
+        </thead> 
+        <!--<tbody>-->
+        <tbody 
+        hx-post="{% url 'category-totals' %}"
+        hx-target="#category"
+        hx-swap="innerHTML">
+            <tr>
+                <th>Budget</th>
+                {% for category in category_totals %}
+                <td class="category">${{ category.budget }}</td>
+                {% endfor %} 
+            </tr>   
+            <tr>
+                <th>Monthly Spend</th>
+                {% for category in category_totals %}
+                    <td class="category
+                        {% if category.total_spend > category.budget %}
+                            red-text 
+                        {% else %}
+                            green-text
+                        {% endif %}">
+                        ${{ category.total_spend|floatformat:2 }}
+                    </td>
+                {% endfor %} 
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

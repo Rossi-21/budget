@@ -3,39 +3,34 @@
 
 <h1>Hello Budget</h1>
 
-<div>
-    {% for catagory in catagories %}
-        <h3>{{ catagory }}</h3>
-        <p>${{ catagory.budget }}</p>
-    {% endfor %}
-</div>
+{% include 'snippets/categoryTotals.html' %}
 
 {% for message in messages %}
     <p class="message">{{ message }}</p>
 {% endfor %}
 
-<form method="POST">
-    {% csrf_token %}
-    <div class="">
-        {{form.as_p}}
-    </div>
-    <button type="submit">Enter</button>
-</form>
+{% include 'snippets/createTransaction.html' %}
+
 <a href="{% url 'add-location' %}">add location</a>
-<a href="{% url 'add-catagory' %}">add catagory</a>
+<a href="{% url 'add-category' %}">add catagory</a>
+
 <table>
-    <tr>
-        <th>date</th>
-        <th>location</th>
-        <th>amount</th>
-    </tr>
-    {% for transaction in transactions %}
+    <thead>
+        <tr>
+            <th>date</th>
+            <th>location</th>
+            <th>amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in latestTransactions %}
         <tr>
             <td>{{ transaction.date}}</td>
             <td>{{ transaction.location }}</td>
             <td>${{ transaction.amount }}</td>
         </tr>
-    {% endfor %}
+        {% endfor %}
+    </tbody>
 </table>
 
 {% endblock %}

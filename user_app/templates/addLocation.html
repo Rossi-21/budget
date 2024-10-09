@@ -18,7 +18,7 @@
         <button type="submit">Enter</button>
     </form>
     <a href="{% url 'home' %}">home</a>
-    <a href="{% url 'add-catagory' %}">add catagory</a>
+    <a href="{% url 'add-category' %}">add catagory</a>
     <ol>
         {% for location in locations %}
             <li>{{ location.name }}</li>
