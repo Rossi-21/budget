@@ -40,6 +40,16 @@ def createTransaction(request):
     return render(request, 'createTransaction.html')
 
 
+def latestTransactions(request):
+    return render(request, 'snippets/latestTransactions.html')
+
+
+def categoryTotals(request):
+    category_totals = calculate_category_totals()
+    context = {'category_totals': category_totals}
+    return render(request, 'snippets/categoryTotals.html', context)
+
+
 def addLocation(request):
     locations = Location.objects.all()
     form = LocationCreateForm()
@@ -72,13 +82,28 @@ def addCategory(request):
     return render(request, "addCategory.html", context)
 
 
-def categoryTotals(request):
-    category_totals = calculate_category_totals()
-    context = {'category_totals': category_totals}
-    return render(request, 'snippets/categoryTotals.html', context)
+def viewTransactions(request):
+    transactions = Transaction.objects.filter(location__name="Bank of America")
 
+    context = {
+        'transactions': transactions,
+    }
+    return render(request, "viewTransactions.html", context)
+
+
+def updateTransaction(request, id):
+    transaction = Transaction.objects.get(id=id)
+    form = TransactionCreateForm(instance=transaction)
+
+    context = {
+        'transaction': transaction,
+        'form': form,
+    }
+    return render(request, "updateTransaction.html", context)
 
 # Helper Functions
+
+
 def calculate_category_totals():
     today = datetime.today()
     current_month = today.month

@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+{% block content %}
+
+
+{% for transaction in transactions %}
+<table>
+    <tr>
+        <td>{{ transaction.date}}</td>
+        <td>{{ transaction.location }}</td>
+        <td>${{ transaction.amount }}</td>
+        <td><a href="{% url 'update-transaction' transaction.id %}">edit</a></td>
+    </tr>
+</table>
+
+{% endfor %}
+
+{% endblock %}

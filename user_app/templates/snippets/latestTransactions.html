@@ -1,0 +1,26 @@
+{% extends 'main.html' %}
+{% block content %}
+<div 
+hx-post="{% url 'latest-transaction' %}"
+hx-target="#latest-transactions"
+hx-swap="innerHTML">
+    <table class="latest-transaction">
+        <thead>
+            <tr>
+                <th>date</th>
+                <th>location</th>
+                <th>amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in latestTransactions %}
+            <tr>
+                <td>{{ transaction.date}}</td>
+                <td>{{ transaction.location }}</td>
+                <td>${{ transaction.amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

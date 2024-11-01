@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<h1>Update Transaction</h1>
+<form action="">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Update</button>
+    <button><a href="{% url 'home' %}">Cancel</a></button>
+</form>
+
+{% endblock %}

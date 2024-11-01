@@ -5,14 +5,11 @@
 
 {% include 'snippets/categoryTotals.html' %}
 
-{% for message in messages %}
-    <p class="message">{{ message }}</p>
-{% endfor %}
-
 {% include 'snippets/createTransaction.html' %}
 
 <a href="{% url 'add-location' %}">add location</a>
 <a href="{% url 'add-category' %}">add catagory</a>
+<a href="{% url 'view-transactions' %}">transactions</a>
 
 <table>
     <thead>
@@ -32,5 +29,8 @@
         {% endfor %}
     </tbody>
 </table>
+{% for message in messages %}
+    <p class="message">{{ message }}</p>
+{% endfor %}
 
 {% endblock %}

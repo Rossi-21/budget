@@ -2,9 +2,10 @@ from django.db import models
 
 
 class Transaction(models.Model):
-    amount = models.DecimalField(max_digits=7, decimal_places=2)
     location = models.ForeignKey('Location', on_delete=models.CASCADE)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    note = models.TextField(null=True, blank=True)
     date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

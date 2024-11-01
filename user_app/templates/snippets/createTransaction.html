@@ -6,7 +6,7 @@
     hx-target="#form-container"
     hx-swap="innerHTML">
     <form method="POST">
-    {% csrf_token %}
+        {% csrf_token %}
         <div class="form-container">
             {{form.as_p}}
             <button class="submit-btn" type="submit">Enter</button>
