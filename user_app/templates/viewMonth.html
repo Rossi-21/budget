@@ -1,0 +1,40 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<h1>Hello Monthly Recap</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Submit</button>
+</form>
+{% if transactions %}
+    {{month_name}}
+    {% if category_totals %}
+        {% include 'snippets/categoryTotals.html' %}
+    {% endif %}
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.date }}</td>
+                    <td>{{ transaction.location }}</td>
+                    <td>{{ transaction.amount }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    {{month_name}}
+   <p>
+    Sorry, We couldn't fine any transactions for that month.
+   </p> 
+{% endif %}
+
+{% endblock %}

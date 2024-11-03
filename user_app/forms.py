@@ -33,6 +33,17 @@ class CategoryCreateForm(ModelForm):
         fields = ['name', 'budget']
 
 
+class MonthSelectForm(forms.Form):
+    month = forms.ChoiceField(
+        choices=[(str(i), month) for i, month in enumerate(
+            ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'], 1)],
+        label='Select Month',
+        widget=forms.Select(attrs={'class': 'form'})
+    )
+
+# Todo
+
+
 class TransactionFilterForm(forms.Form):
     location = forms.ModelChoiceField(queryset=Location.objects.all(
     ), required=False, label='Location', empty_label='Select Location')

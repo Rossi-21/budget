@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from datetime import datetime
+from datetime import date
 from django.contrib import messages
 
 from .models import *
@@ -34,20 +35,6 @@ def index(request):
     }
 
     return render(request, "index.html", context)
-
-
-def createTransaction(request):
-    return render(request, 'createTransaction.html')
-
-
-def latestTransactions(request):
-    return render(request, 'snippets/latestTransactions.html')
-
-
-def categoryTotals(request):
-    category_totals = calculate_category_totals()
-    context = {'category_totals': category_totals}
-    return render(request, 'snippets/categoryTotals.html', context)
 
 
 def addLocation(request):
@@ -91,6 +78,29 @@ def viewTransactions(request):
     return render(request, "viewTransactions.html", context)
 
 
+def viewMonth(request):
+    form = MonthSelectForm(request.POST or None)
+    transactions = None
+    selected_month = None
+    month_name = None
+
+    if request.method == 'POST' and form.is_valid():
+        selected_month = int(form.cleaned_data['month'])
+        transactions = Transaction.objects.filter(
+            date__month=selected_month).order_by('date')
+        month_name = MONTH_NAMES.get(selected_month)
+        category_totals = monthly_category_totals(selected_month)
+
+    context = {
+        'form': form,
+        'transactions': transactions,
+        'selected_month': selected_month,
+        'month_name': month_name,
+        'category_totals': category_totals
+    }
+    return render(request, "viewMonth.html", context)
+
+
 def updateTransaction(request, id):
     transaction = Transaction.objects.get(id=id)
     form = TransactionCreateForm(instance=transaction)
@@ -101,7 +111,30 @@ def updateTransaction(request, id):
     }
     return render(request, "updateTransaction.html", context)
 
+# Snippets
+
+
+def createTransaction(request):
+    return render(request, 'createTransaction.html')
+
+
+def latestTransactions(request):
+    return render(request, 'snippets/latestTransactions.html')
+
+
+def categoryTotals(request):
+    category_totals = calculate_category_totals()
+    context = {'category_totals': category_totals}
+    return render(request, 'snippets/categoryTotals.html', context)
+
 # Helper Functions
+
+
+MONTH_NAMES = {
+    1: "January", 2: "February", 3: "March", 4: "April",
+    5: "May", 6: "June", 7: "July", 8: "August",
+    9: "September", 10: "October", 11: "November", 12: "December"
+}
 
 
 def calculate_category_totals():
@@ -116,6 +149,26 @@ def calculate_category_totals():
             category=category,
             date__month=current_month,
             date__year=current_year
+        ).aggregate(Sum('amount'))['amount__sum'] or 0
+
+        category_totals.append({
+            'name': category.name,
+            'budget': category.budget,
+            'total_spend': total_spend,
+        })
+
+    return category_totals
+
+
+def monthly_category_totals(month):
+    month = month
+
+    categories = Category.objects.all()
+    category_totals = []
+    for category in categories:
+        total_spend = Transaction.objects.filter(
+            category=category,
+            date__month=month,
         ).aggregate(Sum('amount'))['amount__sum'] or 0
 
         category_totals.append({
